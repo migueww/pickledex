@@ -90,6 +90,98 @@ describe('BFF Layer (Services & Route Handlers)', () => {
       expect(fetch).toHaveBeenCalledTimes(2) // Incremented once
       expect(fetch).toHaveBeenLastCalledWith('https://rickandmortyapi.com/api/character/3', expect.any(Object))
     })
+
+    it('should deduplicate concurrent episode requests', async () => {
+      const mockEpisode = { id: 1, name: 'Pilot', episode: 'S01E01', characters: [] }
+      
+      let resolveFetch: (value: unknown) => void = () => {}
+      const fetchPromise = new Promise((resolve) => {
+        resolveFetch = resolve
+      })
+      
+      vi.mocked(fetch).mockImplementationOnce(async () => {
+        await fetchPromise
+        return {
+          ok: true,
+          status: 200,
+          json: async () => mockEpisode,
+        } as Response
+      })
+
+      const p1 = fetchExternalEpisode(1)
+      const p2 = fetchExternalEpisode(1)
+
+      resolveFetch(null)
+
+      const [res1, res2] = await Promise.all([p1, p2])
+
+      expect(res1).toEqual(mockEpisode)
+      expect(res2).toEqual(mockEpisode)
+      expect(fetch).toHaveBeenCalledTimes(1)
+    })
+
+    it('should remove pending episode promise on error', async () => {
+      let rejectFetch: (reason: unknown) => void = () => {}
+      const fetchPromise = new Promise((_, reject) => {
+        rejectFetch = reject
+      })
+
+      vi.mocked(fetch).mockImplementationOnce(async () => {
+        await fetchPromise
+        return {
+          ok: false,
+          status: 500,
+        } as Response
+      })
+
+      const p1 = fetchExternalEpisode(1)
+      const p2 = fetchExternalEpisode(1)
+
+      rejectFetch(new Error('Network error'))
+
+      await expect(p1).rejects.toThrow()
+      await expect(p2).rejects.toThrow()
+
+      // Subsequent call should try to fetch again
+      vi.mocked(fetch).mockResolvedValueOnce({
+        ok: true,
+        status: 200,
+        json: async () => ({ id: 1, name: 'Pilot', episode: 'S01E01', characters: [] }),
+      } as Response)
+
+      const res3 = await fetchExternalEpisode(1)
+      expect(res3.id).toBe(1)
+      expect(fetch).toHaveBeenCalledTimes(2)
+    })
+
+    it('should deduplicate concurrent character requests', async () => {
+      const mockChars = [{ id: 1, name: 'Rick', status: 'Alive', species: 'Human', image: 'img' }]
+      
+      let resolveFetch: (value: unknown) => void = () => {}
+      const fetchPromise = new Promise((resolve) => {
+        resolveFetch = resolve
+      })
+
+      vi.mocked(fetch).mockImplementationOnce(async () => {
+        await fetchPromise
+        return {
+          ok: true,
+          status: 200,
+          json: async () => mockChars,
+        } as Response
+      })
+
+      const p1 = fetchExternalCharacters([1])
+      const p2 = fetchExternalCharacters([1])
+
+      resolveFetch(null)
+
+      const [res1, res2] = await Promise.all([p1, p2])
+
+      expect(res1).toEqual(mockChars)
+      expect(res2).toEqual(mockChars)
+      expect(fetch).toHaveBeenCalledTimes(1)
+    })
   })
 
   describe('Route Handlers', () => {
