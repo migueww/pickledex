@@ -11,22 +11,16 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [episode, setEpisode] = useState<EpisodeWithCharacters | null>(null)
-  const [characters, setCharacters] = useState<Character[] | null>(null)
 
   const handleSearch = async (episodeId: number) => {
     setIsLoading(true)
     setError(null)
     setEpisode(null)
-    setCharacters(null)
 
     try {
       // 1. Consultar o episódio e personagens na API do BFF (uma única chamada)
       const episodeData = await fetchEpisode(episodeId)
       setEpisode(episodeData)
-
-      // 2. Ordenar alfabeticamente pelo nome
-      const sortedCharacters = sortCharactersByName(episodeData.characters)
-      setCharacters(sortedCharacters)
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Ocorreu um erro inesperado.'
       setError(message)
@@ -34,6 +28,9 @@ export default function Home() {
       setIsLoading(false)
     }
   }
+
+  // 2. Ordenar alfabeticamente pelo nome (estado derivado para evitar redundância e re-renderizações)
+  const sortedCharacters = episode ? sortCharactersByName(episode.characters) : []
 
   return (
     <div className="min-h-screen bg-slate-950 text-white font-sans flex flex-col">
@@ -83,7 +80,7 @@ export default function Home() {
             </div>
           )}
 
-          {!isLoading && !error && episode && characters && (
+          {!isLoading && !error && episode && (
             <div className="flex flex-col gap-6">
               {/* Informações do Episódio */}
               <div className="bg-slate-900 border border-slate-800 rounded-lg p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -97,7 +94,7 @@ export default function Home() {
                 </div>
                 <div className="bg-slate-800 px-4 py-2 rounded-md border border-slate-700 text-right self-start sm:self-center">
                   <span className="text-slate-400 text-xs block">Personagens</span>
-                  <span className="text-white font-bold text-lg">{characters.length}</span>
+                  <span className="text-white font-bold text-lg">{sortedCharacters.length}</span>
                 </div>
               </div>
 
@@ -106,7 +103,7 @@ export default function Home() {
                 <h4 className="text-xl font-bold text-slate-200 border-b border-slate-800 pb-2">
                   Characters
                 </h4>
-                <CharacterList characters={characters} />
+                <CharacterList characters={sortedCharacters} />
               </div>
             </div>
           )}
