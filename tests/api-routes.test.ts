@@ -94,18 +94,34 @@ describe('BFF Layer (Services & Route Handlers)', () => {
 
   describe('Route Handlers', () => {
     describe('GET /api/episodes', () => {
-      it('should return 200 and episode data', async () => {
-        const mockEpisode = { id: 1, name: 'Pilot', episode: 'S01E01', characters: [] }
-        vi.mocked(fetch).mockResolvedValueOnce({
-          ok: true,
-          status: 200,
-          json: async () => mockEpisode,
-        } as Response)
+      it('should return 200 and episode data with characters aggregated', async () => {
+        const mockEpisode = { id: 1, name: 'Pilot', episode: 'S01E01', characters: ['https://rickandmortyapi.com/api/character/1', 'https://rickandmortyapi.com/api/character/2'] }
+        const mockChars = [
+          { id: 1, name: 'Rick Sanchez', status: 'Alive', species: 'Human', image: 'img1' },
+          { id: 2, name: 'Morty Smith', status: 'Alive', species: 'Human', image: 'img2' }
+        ]
+
+        vi.mocked(fetch)
+          .mockResolvedValueOnce({
+            ok: true,
+            status: 200,
+            json: async () => mockEpisode,
+          } as Response)
+          .mockResolvedValueOnce({
+            ok: true,
+            status: 200,
+            json: async () => mockChars,
+          } as Response)
 
         const req = new NextRequest('http://localhost/api/episodes?id=1')
         const res = await getEpisode(req)
         expect(res.status).toBe(200)
-        expect(await res.json()).toEqual(mockEpisode)
+        expect(await res.json()).toEqual({
+          id: 1,
+          name: 'Pilot',
+          episode: 'S01E01',
+          characters: mockChars
+        })
       })
 
       it('should return 400 when id parameter is missing', async () => {

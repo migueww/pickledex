@@ -12,3 +12,8 @@ export type Character = {
   species: string
   image: string
 }
+
+export type EpisodeWithCharacters = Omit<Episode, 'characters'> & {
+  characters: Character[]
+}
+

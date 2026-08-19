@@ -3,14 +3,14 @@
 import { useState } from 'react'
 import { EpisodeSearch } from '@/components/episode-search'
 import { CharacterList } from '@/components/character-list'
-import { fetchEpisode, fetchEpisodeCharacters } from '@/services/rick-and-morty-api'
+import { fetchEpisode } from '@/services/rick-and-morty-api'
 import { sortCharactersByName } from '@/utils/sort-characters'
-import { Episode, Character } from '@/types/rick-and-morty'
+import { EpisodeWithCharacters, Character } from '@/types/rick-and-morty'
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [episode, setEpisode] = useState<Episode | null>(null)
+  const [episode, setEpisode] = useState<EpisodeWithCharacters | null>(null)
   const [characters, setCharacters] = useState<Character[] | null>(null)
 
   const handleSearch = async (episodeId: number) => {
@@ -20,15 +20,12 @@ export default function Home() {
     setCharacters(null)
 
     try {
-      // 1. Consultar o episódio na API
+      // 1. Consultar o episódio e personagens na API do BFF (uma única chamada)
       const episodeData = await fetchEpisode(episodeId)
       setEpisode(episodeData)
 
-      // 2. Buscar os dados completos dos personagens concorrentemente
-      const charactersData = await fetchEpisodeCharacters(episodeData.characters)
-      
-      // 3. Ordenar alfabeticamente pelo nome
-      const sortedCharacters = sortCharactersByName(charactersData)
+      // 2. Ordenar alfabeticamente pelo nome
+      const sortedCharacters = sortCharactersByName(episodeData.characters)
       setCharacters(sortedCharacters)
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Ocorreu um erro inesperado.'

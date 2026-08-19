@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { fetchExternalEpisode, UpstreamError } from '@/services/rick-and-morty-external'
+import { fetchExternalEpisode, fetchExternalCharacters, UpstreamError } from '@/services/rick-and-morty-external'
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)
@@ -16,7 +16,22 @@ export async function GET(request: NextRequest) {
 
   try {
     const episode = await fetchExternalEpisode(id)
-    return NextResponse.json(episode)
+    
+    const characterIds = episode.characters.map(url => {
+      const parts = url.split('/')
+      return parseInt(parts[parts.length - 1], 10)
+    }).filter(charId => !isNaN(charId) && charId > 0)
+
+    const characters = await fetchExternalCharacters(characterIds)
+
+    const episodeWithCharacters = {
+      id: episode.id,
+      name: episode.name,
+      episode: episode.episode,
+      characters
+    }
+
+    return NextResponse.json(episodeWithCharacters)
   } catch (error) {
     if (error instanceof UpstreamError) {
       return NextResponse.json({ error: error.message }, { status: error.status })

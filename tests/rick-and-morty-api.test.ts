@@ -11,12 +11,14 @@ describe('Rick & Morty API Service (BFF Client)', () => {
   })
 
   describe('fetchEpisode', () => {
-    it('should return episode data on successful response', async () => {
+    it('should return episode data with characters aggregated on successful response', async () => {
       const mockEpisode = {
         id: 1,
         name: 'Pilot',
         episode: 'S01E01',
-        characters: ['https://rickandmortyapi.com/api/character/1'],
+        characters: [
+          { id: 1, name: 'Rick Sanchez', status: 'Alive', species: 'Human', image: 'url' }
+        ],
       }
 
       vi.mocked(fetch).mockResolvedValueOnce({

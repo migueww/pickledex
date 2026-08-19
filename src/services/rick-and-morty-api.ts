@@ -1,6 +1,6 @@
-import { Episode, Character } from '@/types/rick-and-morty'
+import { Episode, Character, EpisodeWithCharacters } from '@/types/rick-and-morty'
 
-export async function fetchEpisode(episodeNumber: number): Promise<Episode> {
+export async function fetchEpisode(episodeNumber: number): Promise<EpisodeWithCharacters> {
   try {
     const res = await fetch(`/api/episodes?id=${episodeNumber}`)
     
