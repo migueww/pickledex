@@ -123,22 +123,22 @@ describe('CharacterCard Component', () => {
   it('displays Alive status badge with correct styling classes', () => {
     render(<CharacterCard character={mockCharacterAlive} />)
     const badge = screen.getByText('Alive')
-    expect(badge).toHaveClass('bg-emerald-500/20')
-    expect(badge).toHaveClass('text-emerald-400')
+    expect(badge).toHaveClass('bg-emerald-50')
+    expect(badge).toHaveClass('text-emerald-700')
   })
 
   it('displays Dead status badge with correct styling classes', () => {
     render(<CharacterCard character={mockCharacterDead} />)
     const badge = screen.getByText('Dead')
-    expect(badge).toHaveClass('bg-rose-500/20')
-    expect(badge).toHaveClass('text-rose-400')
+    expect(badge).toHaveClass('bg-rose-50')
+    expect(badge).toHaveClass('text-rose-700')
   })
 
   it('displays unknown status badge with correct styling classes', () => {
     render(<CharacterCard character={mockCharacterUnknown} />)
     const badge = screen.getByText('unknown')
-    expect(badge).toHaveClass('bg-slate-500/20')
-    expect(badge).toHaveClass('text-slate-400')
+    expect(badge).toHaveClass('bg-slate-100')
+    expect(badge).toHaveClass('text-slate-600')
   })
 
   it('renders a fallback initials avatar when image loading fails', () => {
@@ -150,7 +150,7 @@ describe('CharacterCard Component', () => {
 
     expect(screen.queryByRole('img')).not.toBeInTheDocument()
     expect(screen.getByText('R')).toBeInTheDocument()
-    expect(screen.getByText('R')).toHaveClass('bg-slate-900')
+    expect(screen.getByText('R')).toHaveClass('bg-slate-100')
   })
 
   it('renders fallback initials avatar immediately if image URL is empty', () => {
