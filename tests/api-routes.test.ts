@@ -53,8 +53,8 @@ describe('BFF Layer (Services & Route Handlers)', () => {
     })
 
     it('should successfully fetch, batch, and cache characters', async () => {
-      const mockChar1 = { id: 1, name: 'Rick Sanchez', status: 'Alive', species: 'Human', image: 'img1' }
-      const mockChar2 = { id: 2, name: 'Morty Smith', status: 'Alive', species: 'Human', image: 'img2' }
+      const mockChar1 = { id: 1, name: 'Rick Sanchez', status: 'Alive', species: 'Human', image: 'https://rickandmortyapi.com/img1' }
+      const mockChar2 = { id: 2, name: 'Morty Smith', status: 'Alive', species: 'Human', image: 'https://rickandmortyapi.com/img2' }
 
       vi.mocked(fetch).mockResolvedValueOnce({
         ok: true,
@@ -76,7 +76,7 @@ describe('BFF Layer (Services & Route Handlers)', () => {
       expect(fetch).toHaveBeenCalledTimes(1) // Not incremented
 
       // Third call (partial cache hit: 1 is cached, 3 is missing)
-      const mockChar3 = { id: 3, name: 'Summer Smith', status: 'Alive', species: 'Human', image: 'img3' }
+      const mockChar3 = { id: 3, name: 'Summer Smith', status: 'Alive', species: 'Human', image: 'https://rickandmortyapi.com/img3' }
       vi.mocked(fetch).mockResolvedValueOnce({
         ok: true,
         status: 200,
@@ -155,7 +155,7 @@ describe('BFF Layer (Services & Route Handlers)', () => {
     })
 
     it('should deduplicate concurrent character requests', async () => {
-      const mockChars = [{ id: 1, name: 'Rick', status: 'Alive', species: 'Human', image: 'img' }]
+      const mockChars = [{ id: 1, name: 'Rick', status: 'Alive', species: 'Human', image: 'https://rickandmortyapi.com/img' }]
       
       let resolveFetch: (value: unknown) => void = () => {}
       const fetchPromise = new Promise((resolve) => {
@@ -189,8 +189,8 @@ describe('BFF Layer (Services & Route Handlers)', () => {
       it('should return 200 and episode data with characters aggregated', async () => {
         const mockEpisode = { id: 1, name: 'Pilot', episode: 'S01E01', characters: ['https://rickandmortyapi.com/api/character/1', 'https://rickandmortyapi.com/api/character/2'] }
         const mockChars = [
-          { id: 1, name: 'Rick Sanchez', status: 'Alive', species: 'Human', image: 'img1' },
-          { id: 2, name: 'Morty Smith', status: 'Alive', species: 'Human', image: 'img2' }
+          { id: 1, name: 'Rick Sanchez', status: 'Alive', species: 'Human', image: 'https://rickandmortyapi.com/img1' },
+          { id: 2, name: 'Morty Smith', status: 'Alive', species: 'Human', image: 'https://rickandmortyapi.com/img2' }
         ]
 
         vi.mocked(fetch)
@@ -264,7 +264,7 @@ describe('BFF Layer (Services & Route Handlers)', () => {
 
     describe('GET /api/characters', () => {
       it('should return 200 and characters data', async () => {
-        const mockChars = [{ id: 1, name: 'Rick Sanchez', status: 'Alive', species: 'Human', image: 'img1' }]
+        const mockChars = [{ id: 1, name: 'Rick Sanchez', status: 'Alive', species: 'Human', image: 'https://rickandmortyapi.com/img1' }]
         vi.mocked(fetch).mockResolvedValueOnce({
           ok: true,
           status: 200,

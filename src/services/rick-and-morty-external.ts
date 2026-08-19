@@ -32,8 +32,12 @@ export function clearExternalCache(): void {
 
 export async function fetchExternalEpisode(id: number): Promise<Episode> {
   const cached = episodeCache.get(id)
-  if (cached && Date.now() < cached.expiry) {
-    return cached.data
+  if (cached) {
+    if (Date.now() < cached.expiry) {
+      return cached.data
+    } else {
+      episodeCache.delete(id)
+    }
   }
 
   let promise = pendingEpisodes.get(id)
@@ -85,8 +89,12 @@ export async function fetchExternalCharacters(ids: number[]): Promise<Character[
   // Check cache first
   for (const id of ids) {
     const cached = characterCache.get(id)
-    if (cached && Date.now() < cached.expiry) {
-      result.push(cached.data)
+    if (cached) {
+      if (Date.now() < cached.expiry) {
+        result.push(cached.data)
+      } else {
+        characterCache.delete(id)
+      }
     } else {
       missingIds.push(id)
     }
@@ -123,13 +131,16 @@ export async function fetchExternalCharacters(ids: number[]): Promise<Character[
         // If only one character requested, API returns an object instead of array
         const fetchedCharacters: Character[] = Array.isArray(responseData) ? responseData : [responseData]
 
-        const mappedCharacters: Character[] = fetchedCharacters.map(data => ({
-          id: data.id,
-          name: data.name,
-          status: data.status,
-          species: data.species,
-          image: data.image,
-        }))
+        const mappedCharacters: Character[] = fetchedCharacters.map(data => {
+          const isValidImage = typeof data.image === 'string' && data.image.startsWith('https://rickandmortyapi.com/')
+          return {
+            id: data.id,
+            name: data.name,
+            status: data.status,
+            species: data.species,
+            image: isValidImage ? data.image : '',
+          }
+        })
 
         // Save newly fetched characters to cache
         for (const char of mappedCharacters) {

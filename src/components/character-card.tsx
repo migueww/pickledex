@@ -23,7 +23,7 @@ export function CharacterCard({ character }: CharacterCardProps) {
   return (
     <div className="flex flex-col bg-slate-900 border border-slate-800 rounded-lg overflow-hidden transition-all hover:border-slate-700 hover:shadow-md hover:shadow-emerald-950/20 group">
       <div className="relative aspect-square w-full bg-slate-950 flex items-center justify-center overflow-hidden">
-        {imageError ? (
+        {imageError || !character.image ? (
           <div className="text-6xl font-extrabold text-slate-800 flex items-center justify-center w-full h-full bg-slate-900">
             {character.name.charAt(0).toUpperCase()}
           </div>
