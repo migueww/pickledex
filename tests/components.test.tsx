@@ -8,13 +8,13 @@ import React from 'react'
 
 // Mock Next.js Image component to render a standard img tag for simplicity
 vi.mock('next/image', () => ({
-  default: ({ src, alt, onError, fill, sizes, priority, ...props }: any) => {
+  default: (props: React.ImgHTMLAttributes<HTMLImageElement> & { fill?: unknown; priority?: unknown }) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { fill, sizes, priority, ...imgProps } = props;
     return (
+      // eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text
       <img
-        src={src}
-        alt={alt}
-        onError={onError}
-        {...props}
+        {...imgProps}
       />
     )
   }

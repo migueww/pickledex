@@ -1,4 +1,4 @@
-import { Character, EpisodeWithCharacters } from '@/types/rick-and-morty'
+import { EpisodeWithCharacters } from '@/types/rick-and-morty'
 
 export async function fetchEpisode(episodeNumber: number): Promise<EpisodeWithCharacters> {
   try {

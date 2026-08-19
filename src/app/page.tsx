@@ -5,7 +5,7 @@ import { EpisodeSearch } from '@/components/episode-search'
 import { CharacterList } from '@/components/character-list'
 import { fetchEpisode } from '@/services/rick-and-morty-api'
 import { sortCharactersByName } from '@/utils/sort-characters'
-import { EpisodeWithCharacters, Character } from '@/types/rick-and-morty'
+import { EpisodeWithCharacters } from '@/types/rick-and-morty'
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(false)
