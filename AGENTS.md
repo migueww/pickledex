@@ -29,3 +29,4 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 - **Docker**: The application is configured to run smoothly via Docker. When creating or updating files, verify that `Dockerfile` and `docker-compose.yml` don't require adjustments, or update them if needed.
 - **Communication**: When using tools, favor native AI coding tools over generic shell commands (e.g., use `view_file` instead of `cat`, `replace_file_content` instead of `sed`).
 - **Dependencies**: Refrain from installing new dependencies unless strictly necessary for the task at hand.
+- **Architecture**: Separate business logic and state management from UI components using Custom Hooks (`src/hooks`). Keep pure helper functions outside of React component scopes to optimize rendering.

@@ -26,11 +26,14 @@ Uma aplicação web moderna e premium desenvolvida em Next.js para consultar epi
 │   │   └── globals.css         # Estilos globais, temas e animações do Tailwind CSS v4
 │   │
 │   ├── components/
-│   │   ├── episode-search.tsx  # Input de busca responsivo
+│   │   ├── episode-search.tsx  # Componente visual de busca (utiliza o hook useEpisodeSearch)
 │   │   ├── search-section.tsx  # Client Component intermediário para useTransition e navegação
 │   │   ├── clear-search-button.tsx # Botão interativo para redefinir busca e parâmetros
-│   │   ├── character-card.tsx  # Card visual de cada personagem ('use client')
+│   │   ├── character-card.tsx  # Card visual de cada personagem (com funções puras otimizadas)
 │   │   └── character-list.tsx  # Grid responsivo e animações de fade-in
+│   │
+│   ├── hooks/
+│   │   └── use-episode-search.ts # Custom Hook isolando estados e validações de busca
 │   │
 │   ├── services/
 │   │   └── rick-and-morty-external.ts # Lógica upstream de fetch, cache e deduplicação
