@@ -53,7 +53,7 @@ async function EpisodeResults({ episodeQuery }: { episodeQuery: string }) {
   )
 }
 
-async function EpisodeResultsWrapper({ episodeQuery }: { episodeQuery: string }) {
+export async function EpisodeResultsWrapper({ episodeQuery }: { episodeQuery: string }) {
   try {
     return await EpisodeResults({ episodeQuery })
   } catch (err) {

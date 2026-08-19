@@ -42,8 +42,8 @@ A aplicação está dividida nas seguintes camadas:
 ## Testing
 
 * **Framework:** Vitest integrado com React Testing Library e JSDom.
-* **Cobertura:** A suíte possui testes de unidade para funções puras (`sortCharactersByName`) e testes de componentes (validação de formulários no `EpisodeSearch`, formatação visual condicional e renderização em caso de falha de imagem no `CharacterCard`).
-* **Testes unitários vs. integração:** O utilitário `sort-characters.ts` é testado puramente como unidade lógica, enquanto os componentes visuais validam o comportamento esperado na árvore de renderização DOM através de interações simuladas (`fireEvent`).
+* **Cobertura:** Testes unitários para ordenação (`sort-characters.ts`), custom hook de busca (`use-episode-search.ts`), serviço de cache/deduplicação (`services.test.ts`), componentes visuais (`components.test.tsx`) e fluxo de integração de UI (`integration.test.tsx`).
+* **Testes unitários vs. integração:** Lógicas de domínio, hooks e serviços são validados de forma unitária. Renderizações de árvore de componentes e comportamentos integrados de requisição e fallbacks na página são validados na árvore DOM de integração.
 
 ## Security
 
