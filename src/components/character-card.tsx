@@ -4,34 +4,34 @@ import Image from 'next/image'
 import { useState } from 'react'
 import { Character } from '@/types/rick-and-morty'
 
+const getStatusColor = (status: string) => {
+  switch (status.toLowerCase()) {
+    case 'alive':
+      return 'bg-emerald-50 text-emerald-700 border-emerald-200'
+    case 'dead':
+      return 'bg-rose-50 text-rose-700 border-rose-200'
+    default:
+      return 'bg-slate-100 text-slate-600 border-slate-200'
+  }
+}
+
+const getStatusDot = (status: string) => {
+  switch (status.toLowerCase()) {
+    case 'alive':
+      return 'bg-emerald-500'
+    case 'dead':
+      return 'bg-rose-500'
+    default:
+      return 'bg-slate-400'
+  }
+}
+
 interface CharacterCardProps {
   character: Character
 }
 
 export function CharacterCard({ character }: CharacterCardProps) {
   const [imageError, setImageError] = useState(false)
-
-  const getStatusColor = (status: string) => {
-    switch (status.toLowerCase()) {
-      case 'alive':
-        return 'bg-emerald-50 text-emerald-700 border-emerald-200'
-      case 'dead':
-        return 'bg-rose-50 text-rose-700 border-rose-200'
-      default:
-        return 'bg-slate-100 text-slate-600 border-slate-200'
-    }
-  }
-
-  const getStatusDot = (status: string) => {
-    switch (status.toLowerCase()) {
-      case 'alive':
-        return 'bg-emerald-500'
-      case 'dead':
-        return 'bg-rose-500'
-      default:
-        return 'bg-slate-400'
-    }
-  }
 
   return (
     <div className="flex flex-col bg-white border border-slate-200 rounded-lg overflow-hidden transition-shadow hover:shadow-sm">
