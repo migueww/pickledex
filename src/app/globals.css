@@ -1,17 +1,81 @@
 @import "tailwindcss";
 
-:root {
-  --background: #020617;
-  --foreground: #f8fafc;
+@theme {
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-mono-serif, monospace;
+  
+  /* Portal theme colors */
+  --color-portal-green: #10b981;
+  --color-portal-lime: #a3e635;
+  --color-portal-bright: #39ff14;
+  --color-space-obsidian: #030712;
+  
+  /* Animations */
+  --animate-portal-spin: portal-spin 25s linear infinite;
+  --animate-portal-pulse: portal-pulse 3s ease-in-out infinite;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-fade-in: fadeIn 0.4s ease-out;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+@keyframes portal-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes portal-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.8;
+    filter: drop-shadow(0 0 15px rgba(16, 185, 129, 0.3));
+  }
+  50% {
+    transform: scale(1.03);
+    opacity: 1;
+    filter: drop-shadow(0 0 35px rgba(16, 185, 129, 0.7));
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+:root {
+  --background: #030712;
+  --foreground: #f9fafb;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  
+  /* Beautiful Space/Portal Theme background pattern */
+  background-image: 
+    radial-gradient(circle at 50% -20%, rgba(16, 185, 129, 0.15), transparent 60%),
+    radial-gradient(circle at 10% 20%, rgba(6, 182, 212, 0.05), transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(139, 92, 246, 0.05), transparent 40%),
+    linear-gradient(rgba(255, 255, 255, 0.005) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.005) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 100% 100%, 40px 40px, 40px 40px;
+  background-attachment: fixed;
 }
