@@ -1,10 +1,8 @@
 import { Episode, Character } from '@/types/rick-and-morty'
 
-const API_BASE_URL = 'https://rickandmortyapi.com/api'
-
 export async function fetchEpisode(episodeNumber: number): Promise<Episode> {
   try {
-    const res = await fetch(`${API_BASE_URL}/episode/${episodeNumber}`)
+    const res = await fetch(`/api/episodes?id=${episodeNumber}`)
     
     if (res.status === 404) {
       throw new Error('Episódio não encontrado')
@@ -25,17 +23,21 @@ export async function fetchEpisode(episodeNumber: number): Promise<Episode> {
 
 export async function fetchCharacter(url: string): Promise<Character> {
   try {
-    const res = await fetch(url)
+    const parts = url.split('/')
+    const id = parts[parts.length - 1]
+    
+    const res = await fetch(`/api/characters?ids=${id}`)
     if (!res.ok) {
       throw new Error('Erro ao buscar personagem')
     }
     const data = await res.json()
+    const char = data[0]
     return {
-      id: data.id,
-      name: data.name,
-      status: data.status,
-      species: data.species,
-      image: data.image,
+      id: char.id,
+      name: char.name,
+      status: char.status,
+      species: char.species,
+      image: char.image,
     }
   } catch {
     throw new Error('Erro ao buscar personagens')
@@ -48,10 +50,16 @@ export async function fetchEpisodeCharacters(characterUrls: string[]): Promise<C
   }
   
   try {
-    const characters = await Promise.all(
-      characterUrls.map(url => fetchCharacter(url))
-    )
-    return characters
+    const ids = characterUrls.map(url => {
+      const parts = url.split('/')
+      return parts[parts.length - 1]
+    }).join(',')
+
+    const res = await fetch(`/api/characters?ids=${ids}`)
+    if (!res.ok) {
+      throw new Error('Erro ao buscar personagens')
+    }
+    return await res.json()
   } catch {
     throw new Error('Erro ao buscar personagens. A consulta falhou.')
   }

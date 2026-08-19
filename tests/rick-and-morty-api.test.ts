@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { fetchEpisode, fetchCharacter, fetchEpisodeCharacters } from '@/services/rick-and-morty-api'
 
-describe('Rick & Morty API Service', () => {
+describe('Rick & Morty API Service (BFF Client)', () => {
   beforeEach(() => {
     vi.stubGlobal('fetch', vi.fn())
   })
@@ -27,7 +27,7 @@ describe('Rick & Morty API Service', () => {
 
       const result = await fetchEpisode(1)
       expect(result).toEqual(mockEpisode)
-      expect(fetch).toHaveBeenCalledWith('https://rickandmortyapi.com/api/episode/1')
+      expect(fetch).toHaveBeenCalledWith('/api/episodes?id=1')
     })
 
     it('should throw "Episódio não encontrado" when response status is 404', async () => {
@@ -63,13 +63,13 @@ describe('Rick & Morty API Service', () => {
         status: 'Alive',
         species: 'Human',
         image: 'image_url',
-        gender: 'Male', // should be filtered out
+        gender: 'Male',
       }
 
       vi.mocked(fetch).mockResolvedValueOnce({
         ok: true,
         status: 200,
-        json: async () => mockApiResponse,
+        json: async () => [mockApiResponse],
       } as Response)
 
       const result = await fetchCharacter('https://rickandmortyapi.com/api/character/1')
@@ -80,6 +80,7 @@ describe('Rick & Morty API Service', () => {
         species: 'Human',
         image: 'image_url',
       })
+      expect(fetch).toHaveBeenCalledWith('/api/characters?ids=1')
     })
 
     it('should throw error when character fetch fails', async () => {
@@ -93,21 +94,15 @@ describe('Rick & Morty API Service', () => {
   })
 
   describe('fetchEpisodeCharacters', () => {
-    it('should fetch multiple characters in parallel', async () => {
+    it('should fetch multiple characters in a single batch', async () => {
       const mockChar1 = { id: 1, name: 'Rick', status: 'Alive', species: 'Human', image: 'url1' }
       const mockChar2 = { id: 2, name: 'Morty', status: 'Alive', species: 'Human', image: 'url2' }
 
-      vi.mocked(fetch)
-        .mockResolvedValueOnce({
-          ok: true,
-          status: 200,
-          json: async () => mockChar1,
-        } as Response)
-        .mockResolvedValueOnce({
-          ok: true,
-          status: 200,
-          json: async () => mockChar2,
-        } as Response)
+      vi.mocked(fetch).mockResolvedValueOnce({
+        ok: true,
+        status: 200,
+        json: async () => [mockChar1, mockChar2],
+      } as Response)
 
       const result = await fetchEpisodeCharacters([
         'https://rickandmortyapi.com/api/character/1',
@@ -118,7 +113,8 @@ describe('Rick & Morty API Service', () => {
         { id: 1, name: 'Rick', status: 'Alive', species: 'Human', image: 'url1' },
         { id: 2, name: 'Morty', status: 'Alive', species: 'Human', image: 'url2' },
       ])
-      expect(fetch).toHaveBeenCalledTimes(2)
+      expect(fetch).toHaveBeenCalledTimes(1)
+      expect(fetch).toHaveBeenCalledWith('/api/characters?ids=1,2')
     })
 
     it('should return empty array when character list is empty', async () => {
@@ -127,17 +123,11 @@ describe('Rick & Morty API Service', () => {
       expect(fetch).not.toHaveBeenCalled()
     })
 
-    it('should throw error if any character fetch fails', async () => {
-      vi.mocked(fetch)
-        .mockResolvedValueOnce({
-          ok: true,
-          status: 200,
-          json: async () => ({ id: 1, name: 'Rick', status: 'Alive', species: 'Human', image: 'url1' }),
-        } as Response)
-        .mockResolvedValueOnce({
-          ok: false,
-          status: 404,
-        } as Response)
+    it('should throw error if characters fetch fails', async () => {
+      vi.mocked(fetch).mockResolvedValueOnce({
+        ok: false,
+        status: 404,
+      } as Response)
 
       await expect(
         fetchEpisodeCharacters([
