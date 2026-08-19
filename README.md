@@ -20,39 +20,17 @@ Uma aplicação web moderna e premium desenvolvida em Next.js para consultar epi
 
 ```text
 ├── src/
-│   ├── app/
-│   │   ├── page.tsx            # Server Component assíncrono que consome serviços diretamente
-│   │   ├── layout.tsx          # Layout global e injeção do Favicon nos metadados
-│   │   └── globals.css         # Estilos globais, temas e animações do Tailwind CSS v4
-│   │
-│   ├── components/
-│   │   ├── episode-search.tsx  # Componente visual de busca (utiliza o hook useEpisodeSearch)
-│   │   ├── search-section.tsx  # Client Component intermediário para useTransition e navegação
-│   │   ├── clear-search-button.tsx # Botão interativo para redefinir busca e parâmetros
-│   │   ├── character-card.tsx  # Card visual de cada personagem (com funções puras otimizadas)
-│   │   └── character-list.tsx  # Grid responsivo e animações de fade-in
-│   │
-│   ├── hooks/
-│   │   └── use-episode-search.ts # Custom Hook isolando estados e validações de busca
-│   │
-│   ├── services/
-│   │   └── rick-and-morty-external.ts # Lógica upstream de fetch, cache e deduplicação
-│   │
-│   ├── utils/
-│   │   └── sort-characters.ts  # Lógica pura de ordenação alfabética
-│   │
-│   └── types/
-│       └── rick-and-morty.ts   # Tipos TypeScript estritos para a API
+│   ├── app/          # Roteamento do Next.js App Router (Server Components e layout global)
+│   ├── components/   # Componentes visuais React (Client e Server Components isolados)
+│   ├── hooks/        # Custom Hooks para separação de lógica de estado (business logic)
+│   ├── services/     # Camada de comunicação com a API externa (fetch, cache e tratamento de erros)
+│   ├── utils/        # Funções utilitárias puras e helpers sem dependência direta do React
+│   └── types/        # Tipagem estrita TypeScript e interfaces de dados da aplicação
 │
-├── tests/
-│   ├── setup.ts                # Arquivo de setup do Vitest / Testing Library
-│   ├── sort-characters.test.ts # Testes unitários do utilitário de ordenação
-│   └── components.test.tsx     # Testes dos componentes de busca e cards
+├── tests/            # Configurações do Vitest e suíte de testes automatizados (unitários e de tela)
 │
-├── Dockerfile                  # Build multi-stage de produção
-├── docker-compose.yml          # Definição do serviço web do container
-├── vitest.config.ts            # Arquivo de configuração do Vitest
-└── next.config.ts              # Configuração do Next.js (Standalone build & unoptimized images)
+├── Dockerfile        # Build multi-stage focado em segurança e performance (Standalone mode)
+└── docker-compose.yml# Orquestração do serviço web para facilitar o setup e a execução
 ```
 
 ---
