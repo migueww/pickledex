@@ -11,17 +11,14 @@ import { EpisodeWithCharacters } from '@/types/rick-and-morty'
 function SVGPortal() {
   return (
     <div className="relative w-48 h-48 sm:w-64 sm:h-64 mx-auto my-6 animate-float flex items-center justify-center">
-      {/* Outer spinning ring */}
       <svg className="absolute w-full h-full animate-portal-spin text-emerald-500/30" viewBox="0 0 100 100">
         <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" strokeWidth="1.5" strokeDasharray="5, 8" />
         <circle cx="50" cy="50" r="40" fill="none" stroke="currentColor" strokeWidth="0.5" strokeDasharray="20, 5" />
       </svg>
-      {/* Middle counter-spinning ring */}
       <svg className="absolute w-5/6 h-5/6 animate-[portal-spin_15s_linear_infinite_reverse] text-lime-400/40" viewBox="0 0 100 100">
         <circle cx="50" cy="50" r="42" fill="none" stroke="currentColor" strokeWidth="1" strokeDasharray="15, 10" />
         <path d="M 50 8 A 42 42 0 0 1 92 50" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
       </svg>
-      {/* Center glowing portal energy */}
       <div className="w-2/3 h-2/3 rounded-full bg-gradient-to-tr from-emerald-500 via-teal-500 to-lime-400 animate-portal-pulse opacity-90 shadow-[0_0_50px_rgba(16,185,129,0.6)] flex items-center justify-center">
         <div className="w-11/12 h-11/12 rounded-full bg-slate-950/80 flex items-center justify-center text-4xl select-none">
           🌀
@@ -91,7 +88,6 @@ function PickleDexApp() {
 
   return (
     <div className="min-h-screen text-slate-100 font-sans flex flex-col selection:bg-emerald-500/30 selection:text-emerald-300">
-      {/* Header */}
       <header className="border-b border-slate-900 bg-slate-950/70 backdrop-blur-xl sticky top-0 z-50 py-4 px-6 transition-all duration-300">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-4">
@@ -114,7 +110,6 @@ function PickleDexApp() {
         </div>
       </header>
 
-      {/* Main Content */}
       <main className="flex-1 max-w-6xl w-full mx-auto px-4 py-8 md:py-12 flex flex-col items-center gap-10">
         <div className="w-full flex flex-col items-center text-center gap-4 max-w-2xl">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-emerald-500/20 bg-emerald-500/5 text-xs font-semibold text-emerald-400 uppercase tracking-widest mb-1">
@@ -135,10 +130,8 @@ function PickleDexApp() {
           </div>
         </div>
 
-        {/* Divider */}
         <div className="w-full h-px bg-gradient-to-r from-transparent via-slate-800 to-transparent" />
 
-        {/* Main Panel */}
         <div className="w-full min-h-[300px]">
           {isLoading && (
             <div className="flex flex-col items-center justify-center py-20 gap-4" data-testid="page-loading-spinner">
@@ -172,7 +165,6 @@ function PickleDexApp() {
 
           {!isLoading && !error && episode && (
             <div className="flex flex-col gap-8 animate-fade-in">
-              {/* Episode Header Display */}
               <div className="bg-slate-900/40 backdrop-blur-md border border-slate-800/80 rounded-2xl p-6 md:p-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 shadow-[0_4px_30px_rgba(0,0,0,0.2)]">
                 <div className="flex flex-col gap-2">
                   <div className="inline-flex self-start px-2.5 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-mono text-xs font-bold tracking-wider uppercase">
@@ -190,7 +182,6 @@ function PickleDexApp() {
                 </div>
               </div>
 
-              {/* Character Section */}
               <div className="flex flex-col gap-6">
                 <div className="flex items-center gap-3 border-b border-slate-900 pb-3">
                   <span className="text-lg">👥</span>
@@ -228,7 +219,6 @@ function PickleDexApp() {
         </div>
       </main>
 
-      {/* Footer */}
       <footer className="border-t border-slate-900 py-6 text-center text-xs text-slate-600 bg-slate-950/20 font-mono">
         <p>PICKLEDEX PORTAL SYSTEM V2.6 • ALL REALITIES COVERED</p>
       </footer>

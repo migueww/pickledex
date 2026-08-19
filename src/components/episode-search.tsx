@@ -26,7 +26,6 @@ export function EpisodeSearch({ onSearch, isLoading, initialValue = '' }: Episod
       return
     }
 
-    // Apenas números inteiros positivos (dígitos de 0-9)
     if (!/^\d+$/.test(trimmed)) {
       setValidationError('O campo deve aceitar somente números inteiros positivos.')
       return

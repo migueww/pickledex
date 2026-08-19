@@ -8,11 +8,9 @@ interface CacheEntry<T> {
   expiry: number
 }
 
-// In-memory cache stores
 const episodeCache = new Map<number, CacheEntry<Episode>>()
 const characterCache = new Map<number, CacheEntry<Character>>()
 
-// Pending request stores for deduplication
 const pendingEpisodes = new Map<number, Promise<Episode>>()
 const pendingCharacters = new Map<string, Promise<Character[]>>()
 
@@ -45,7 +43,7 @@ export async function fetchExternalEpisode(id: number): Promise<Episode> {
     promise = (async () => {
       try {
         const res = await fetch(`${EXTERNAL_API_URL}/episode/${id}`, {
-          next: { revalidate: 86400 }, // Fallback Next.js native cache
+          next: { revalidate: 86400 },
         })
 
         if (res.status === 404) {
@@ -86,7 +84,6 @@ export async function fetchExternalCharacters(ids: number[]): Promise<Character[
   const result: Character[] = []
   const missingIds: number[] = []
 
-  // Check cache first
   for (const id of ids) {
     const cached = characterCache.get(id)
     if (cached) {
@@ -105,7 +102,6 @@ export async function fetchExternalCharacters(ids: number[]): Promise<Character[
     return ids.map(id => idMap.get(id)!).filter(Boolean)
   }
 
-  // Deduplicate fetching of missingIds
   const missingKey = [...missingIds].sort((a, b) => a - b).join(',')
   let promise = pendingCharacters.get(missingKey)
   if (!promise) {
@@ -142,7 +138,6 @@ export async function fetchExternalCharacters(ids: number[]): Promise<Character[
           }
         })
 
-        // Save newly fetched characters to cache
         for (const char of mappedCharacters) {
           characterCache.set(char.id, { data: char, expiry: Date.now() + CACHE_TTL_MS })
         }
@@ -157,7 +152,6 @@ export async function fetchExternalCharacters(ids: number[]): Promise<Character[
 
   const fetchedChars = await promise
 
-  // Combine already cached results with the newly fetched ones
   const allChars = [...result, ...fetchedChars]
   const idMap = new Map(allChars.map(c => [c.id, c]))
   return ids.map(id => idMap.get(id)!).filter(Boolean)

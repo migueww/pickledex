@@ -34,7 +34,6 @@ export function CharacterCard({ character }: CharacterCardProps) {
   return (
     <div className="flex flex-col bg-slate-950/40 backdrop-blur-md border border-slate-900 rounded-2xl overflow-hidden transition-all duration-300 hover:border-emerald-500/30 hover:shadow-[0_0_20px_rgba(16,185,129,0.12)] group relative">
       <div className="relative aspect-square w-full bg-slate-950 flex items-center justify-center overflow-hidden">
-        {/* Vignette Overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent z-10 opacity-70 group-hover:opacity-40 transition-opacity duration-300" />
         
         {imageError || !character.image ? (
