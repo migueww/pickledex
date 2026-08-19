@@ -1,6 +1,6 @@
 import { Episode, Character } from '@/types/rick-and-morty'
 
-const EXTERNAL_API_URL = 'https://rickandmortyapi.com/api'
+const EXTERNAL_API_URL = process.env.RICK_AND_MORTY_API_URL || 'https://rickandmortyapi.com/api'
 const CACHE_TTL_MS = 24 * 60 * 60 * 1000 // 24 hours
 
 interface CacheEntry<T> {
@@ -124,7 +124,6 @@ export async function fetchExternalCharacters(ids: number[]): Promise<Character[
         }
 
         const responseData = await res.json()
-        // If only one character requested, API returns an object instead of array
         const fetchedCharacters: Character[] = Array.isArray(responseData) ? responseData : [responseData]
 
         const mappedCharacters: Character[] = fetchedCharacters.map(data => {
