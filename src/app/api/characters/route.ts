@@ -18,6 +18,10 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'Parâmetro ids deve conter números válidos.' }, { status: 400 })
   }
 
+  if (ids.length > 200) {
+    return NextResponse.json({ error: 'Parâmetro ids não pode conter mais do que 200 números.' }, { status: 400 })
+  }
+
   try {
     const characters = await fetchExternalCharacters(ids)
     return NextResponse.json(characters)

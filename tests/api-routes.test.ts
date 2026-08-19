@@ -227,7 +227,14 @@ describe('BFF Layer (Services & Route Handlers)', () => {
         const req = new NextRequest('http://localhost/api/episodes?id=-5')
         const res = await getEpisode(req)
         expect(res.status).toBe(400)
-        expect(await res.json()).toEqual({ error: 'O id deve ser um número inteiro positivo.' })
+        expect(await res.json()).toEqual({ error: 'O id deve ser um número inteiro positivo válido.' })
+      })
+
+      it('should return 400 when id parameter is too large', async () => {
+        const req = new NextRequest('http://localhost/api/episodes?id=999999')
+        const res = await getEpisode(req)
+        expect(res.status).toBe(400)
+        expect(await res.json()).toEqual({ error: 'O id deve ser um número inteiro positivo válido.' })
       })
 
       it('should handle 404 error from upstream API', async () => {
@@ -282,6 +289,14 @@ describe('BFF Layer (Services & Route Handlers)', () => {
         const res = await getCharacters(req)
         expect(res.status).toBe(400)
         expect(await res.json()).toEqual({ error: 'Parâmetro ids deve conter números válidos.' })
+      })
+
+      it('should return 400 when too many ids are requested', async () => {
+        const largeIds = Array.from({ length: 201 }, (_, i) => i + 1).join(',')
+        const req = new NextRequest(`http://localhost/api/characters?ids=${largeIds}`)
+        const res = await getCharacters(req)
+        expect(res.status).toBe(400)
+        expect(await res.json()).toEqual({ error: 'Parâmetro ids não pode conter mais do que 200 números.' })
       })
     })
   })

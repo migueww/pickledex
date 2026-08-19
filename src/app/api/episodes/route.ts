@@ -10,8 +10,8 @@ export async function GET(request: NextRequest) {
   }
 
   const id = parseInt(idStr, 10)
-  if (isNaN(id) || id <= 0) {
-    return NextResponse.json({ error: 'O id deve ser um número inteiro positivo.' }, { status: 400 })
+  if (isNaN(id) || id <= 0 || id > 100000) {
+    return NextResponse.json({ error: 'O id deve ser um número inteiro positivo válido.' }, { status: 400 })
   }
 
   try {
