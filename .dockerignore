@@ -1,0 +1,14 @@
+node_modules
+.next
+out
+build
+.git
+.gitignore
+README.md
+docker-compose.yml
+Dockerfile
+Especificação Técnica — Rick & Morty Episode Explorer.md
+tests
+vitest.config.ts
+.dockerignore
+npm-debug.log
