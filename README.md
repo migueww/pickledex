@@ -13,15 +13,6 @@ Uma aplicação web moderna e premium desenvolvida em Next.js para consultar epi
 - **Vitest** (Testes unitários e de integração rápidos)
 - **Docker & Docker Compose** (Containerização simplificada em múltiplos estágios)
 
----
-
-## Decisões Técnicas
-
-1. **Uso de `Promise.all`**: O endpoint de episódios da API de Rick and Morty retorna apenas uma lista de URLs correspondentes aos personagens do episódio. Para obter os dados completos de cada personagem, é necessário fazer uma requisição HTTP individual. O uso de `Promise.all` permite disparar todas as requisições em paralelo no nível de rede, otimizando o tempo total de resposta.
-2. **Encapsulamento de Componentes Clientes com `<Suspense>`**: Para evitar avisos de pré-renderização estática do Next.js ao ler parâmetros de busca via `useSearchParams()`, o layout da página principal foi segmentado em componentes de fluxo de hidratação cliente e encapsulado em `<Suspense>`.
-3. **Ordenação Isolada (`utils/sort-characters.ts`)**: A ordenação alfabética foi isolada em uma função pura e independente do componente visual. Isso garante que a lógica de ordenação possa ser facilmente testada unitariamente e reutilizada se necessário, sem a sobrecarga de renderização do React. Utilizamos `localeCompare` para lidar corretamente com acentuações e caracteres especiais no alfabeto.
-4. **Tratamento de Erros Resiliente**: Centralizamos o tratamento de erros HTTP na camada de serviços. Respostas como `404` (Episódio não encontrado) e erros genéricos de rede são capturados e mapeados para mensagens em português amigáveis ao usuário, evitando crashs e exibindo o estado correto de erro na interface.
-5. **Estrutura de Testes com Vitest**: Testes cobrem a lógica crítica (ordenação alfabética em múltiplos cenários e comportamento dos serviços da API com mocks de rede), garantindo segurança total em refatorações estéticas.
 
 ---
 
