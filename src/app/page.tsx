@@ -86,9 +86,12 @@ export default async function Home({
       <header className="border-b border-slate-200 bg-white py-3 px-6 sticky top-0 z-50">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="w-7 h-7 bg-emerald-600 rounded-md flex items-center justify-center font-bold text-white text-xs">
-              PD
-            </div>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="https://static.wikia.nocookie.net/rickandmorty/images/4/41/Pickle_rick_transparent_edgetrimmed.png/revision/latest?cb=20220105043415"
+              alt="Pickle Rick Logo"
+              className="w-7 h-7 object-contain"
+            />
             <h1 className="text-base font-bold tracking-tight text-slate-900">
               PickleDex
             </h1>
@@ -137,8 +140,19 @@ export default async function Home({
         </div>
       </main>
 
-      <footer className="border-t border-slate-200 py-4 text-center text-xs text-slate-500 bg-white">
+      <footer className="border-t border-slate-200 py-4 text-center text-xs text-slate-500 bg-white flex flex-col gap-1">
         <p>PickleDex — Rick & Morty Episode Explorer</p>
+        <p>
+          Desenvolvido por{' '}
+          <a
+            href="https://github.com/migueww"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:underline font-medium text-emerald-600"
+          >
+            Miguel Barcellos (@migueww)
+          </a>
+        </p>
       </footer>
     </div>
   )
