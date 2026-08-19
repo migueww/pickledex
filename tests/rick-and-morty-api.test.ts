@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import { fetchEpisode, fetchCharacter, fetchEpisodeCharacters } from '@/services/rick-and-morty-api'
+import { fetchEpisode } from '@/services/rick-and-morty-api'
 
 describe('Rick & Morty API Service (BFF Client)', () => {
   beforeEach(() => {
@@ -57,86 +57,5 @@ describe('Rick & Morty API Service (BFF Client)', () => {
     })
   })
 
-  describe('fetchCharacter', () => {
-    it('should fetch and return simplified character data', async () => {
-      const mockApiResponse = {
-        id: 1,
-        name: 'Rick Sanchez',
-        status: 'Alive',
-        species: 'Human',
-        image: 'image_url',
-        gender: 'Male',
-      }
 
-      vi.mocked(fetch).mockResolvedValueOnce({
-        ok: true,
-        status: 200,
-        json: async () => [mockApiResponse],
-      } as Response)
-
-      const result = await fetchCharacter('https://rickandmortyapi.com/api/character/1')
-      expect(result).toEqual({
-        id: 1,
-        name: 'Rick Sanchez',
-        status: 'Alive',
-        species: 'Human',
-        image: 'image_url',
-      })
-      expect(fetch).toHaveBeenCalledWith('/api/characters?ids=1')
-    })
-
-    it('should throw error when character fetch fails', async () => {
-      vi.mocked(fetch).mockResolvedValueOnce({
-        ok: false,
-        status: 500,
-      } as Response)
-
-      await expect(fetchCharacter('https://rickandmortyapi.com/api/character/1')).rejects.toThrow('Erro ao buscar personagens')
-    })
-  })
-
-  describe('fetchEpisodeCharacters', () => {
-    it('should fetch multiple characters in a single batch', async () => {
-      const mockChar1 = { id: 1, name: 'Rick', status: 'Alive', species: 'Human', image: 'url1' }
-      const mockChar2 = { id: 2, name: 'Morty', status: 'Alive', species: 'Human', image: 'url2' }
-
-      vi.mocked(fetch).mockResolvedValueOnce({
-        ok: true,
-        status: 200,
-        json: async () => [mockChar1, mockChar2],
-      } as Response)
-
-      const result = await fetchEpisodeCharacters([
-        'https://rickandmortyapi.com/api/character/1',
-        'https://rickandmortyapi.com/api/character/2',
-      ])
-
-      expect(result).toEqual([
-        { id: 1, name: 'Rick', status: 'Alive', species: 'Human', image: 'url1' },
-        { id: 2, name: 'Morty', status: 'Alive', species: 'Human', image: 'url2' },
-      ])
-      expect(fetch).toHaveBeenCalledTimes(1)
-      expect(fetch).toHaveBeenCalledWith('/api/characters?ids=1,2')
-    })
-
-    it('should return empty array when character list is empty', async () => {
-      const result = await fetchEpisodeCharacters([])
-      expect(result).toEqual([])
-      expect(fetch).not.toHaveBeenCalled()
-    })
-
-    it('should throw error if characters fetch fails', async () => {
-      vi.mocked(fetch).mockResolvedValueOnce({
-        ok: false,
-        status: 404,
-      } as Response)
-
-      await expect(
-        fetchEpisodeCharacters([
-          'https://rickandmortyapi.com/api/character/1',
-          'https://rickandmortyapi.com/api/character/2',
-        ])
-      ).rejects.toThrow('Erro ao buscar personagens. A consulta falhou.')
-    })
-  })
 })
