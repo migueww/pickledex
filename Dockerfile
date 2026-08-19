@@ -1,4 +1,3 @@
-# Stage 1: Instalar dependências
 FROM node:22-alpine AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
@@ -6,7 +5,6 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
 
-# Stage 2: Compilar a aplicação
 FROM node:22-alpine AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
@@ -16,7 +14,6 @@ ENV NEXT_TELEMETRY_DISABLED=1
 
 RUN npm run build
 
-# Stage 3: Runner de produção
 FROM node:22-alpine AS runner
 WORKDIR /app
 
@@ -28,11 +25,9 @@ RUN adduser --system --uid 1001 nextjs
 
 COPY --from=builder /app/public ./public
 
-# Criar diretório .next com permissões corretas para cache de renderização
 RUN mkdir .next
 RUN chown nextjs:nodejs .next
 
-# Copiar build standalone
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
@@ -43,5 +38,4 @@ EXPOSE 3000
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
-# O server.js é gerado automaticamente pelo Next.js no modo standalone
 CMD ["node", "server.js"]

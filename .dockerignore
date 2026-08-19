@@ -7,8 +7,20 @@ build
 README.md
 docker-compose.yml
 Dockerfile
-Especificação Técnica — Rick & Morty Episode Explorer.md
 tests
 vitest.config.ts
 .dockerignore
 npm-debug.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.pnpm-store
+.env
+.env.*
+!.env.example
+.vercel
+*.tsbuildinfo
+.vscode
+AGENTS.md
+CLAUDE.md
