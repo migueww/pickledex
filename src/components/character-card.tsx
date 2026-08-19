@@ -1,3 +1,5 @@
+'use client'
+
 import Image from 'next/image'
 import { useState } from 'react'
 import { Character } from '@/types/rick-and-morty'
