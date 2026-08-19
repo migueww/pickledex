@@ -21,17 +21,18 @@ Uma aplicação web moderna e premium desenvolvida em Next.js para consultar epi
 ```text
 ├── src/
 │   ├── app/
-│   │   ├── page.tsx            # Página principal com fluxo de estados e Suspense
+│   │   ├── page.tsx            # Server Component assíncrono que consome serviços diretamente
 │   │   ├── layout.tsx          # Layout global e injeção do Favicon nos metadados
 │   │   └── globals.css         # Estilos globais, temas e animações do Tailwind CSS v4
 │   │
 │   ├── components/
-│   │   ├── episode-search.tsx  # Input de busca responsivo com sincronismo de estado
-│   │   ├── character-card.tsx  # Card visual de cada personagem com glow e badge pulsante
+│   │   ├── episode-search.tsx  # Input de busca responsivo
+│   │   ├── search-section.tsx  # Client Component intermediário para useTransition e navegação
+│   │   ├── clear-search-button.tsx # Botão interativo para redefinir busca e parâmetros
+│   │   ├── character-card.tsx  # Card visual de cada personagem ('use client')
 │   │   └── character-list.tsx  # Grid responsivo e animações de fade-in
 │   │
 │   ├── services/
-│   │   ├── rick-and-morty-api.ts      # Cliente de consumo local (BFF)
 │   │   └── rick-and-morty-external.ts # Lógica upstream de fetch, cache e deduplicação
 │   │
 │   ├── utils/
@@ -43,7 +44,7 @@ Uma aplicação web moderna e premium desenvolvida em Next.js para consultar epi
 ├── tests/
 │   ├── setup.ts                # Arquivo de setup do Vitest / Testing Library
 │   ├── sort-characters.test.ts # Testes unitários do utilitário de ordenação
-│   └── rick-and-morty-api.test.ts # Testes mockados do serviço de API
+│   └── components.test.tsx     # Testes dos componentes de busca e cards
 │
 ├── Dockerfile                  # Build multi-stage de produção
 ├── docker-compose.yml          # Definição do serviço web do container
