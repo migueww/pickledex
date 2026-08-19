@@ -2,30 +2,9 @@
 
 Uma aplicação web moderna e premium desenvolvida em Next.js para consultar episódios da API pública de Rick and Morty, visualizar os personagens que aparecem em cada episódio e listá-los em ordem alfabética.
 
-A interface possui uma estética inspirada em portais de ficção científica da série, abandonando o design genérico e fornecendo uma experiência fluida, responsiva e de alto desempenho.
-
 ---
 
-## Recursos & Diferenciais
-
-- **Sincronização com a URL**: A barra de busca e a URL da página são sincronizadas em tempo real (`?episode=X`). Isso serve como fonte única de verdade (Single Source of Truth), permitindo que o estado da busca e os resultados persistam ao recarregar a página ou compartilhar o link.
-- **Design Interativo & Portal Cósmico**:
-  - Plano de fundo dinâmico com nebulosas espaciais em gradiente radial e grade de malha futurista.
-  - Animação de Portal SVG giratório para buscas vazias com atalhos e sugestões de episódios mais acessados.
-  - Cards com efeito de glassmorphism, vinheta e zoom suave no hover da imagem.
-  - Badges de estado com sinalizador de batimento pulsante (*Alive* com ponto verde piscando, *Dead* com vermelho, *unknown* com cinza).
-- **Validação Local de Inputs**: Bloqueia chamadas de API desnecessárias para campos vazios, textos, números negativos, decimais ou zero.
-- **BFF (Backend-For-Frontend) com Cache e Desduplicação**:
-  - Rotas de API dedicadas no Next.js (`/api/episodes` e `/api/characters`) para desonerar o cliente.
-  - Cache em memória otimizado com tempo de vida útil (TTL) de 24 horas para episódios e personagens.
-  - Deduplicação de requisições concorrentes idênticas no nível de rede para economizar chamadas HTTP repetidas à API externa de Rick & Morty.
-  - Busca paralela utilizando `Promise.all` para maximizar o desempenho.
-- **Ordenação Alfabética**: Ordena os personagens pelo nome utilizando lógica testada baseada em `localeCompare`.
-- **Favicon Personalizado**: Favicon temático integrado via metadados nativos do Next.js.
-
----
-
-## Stack Tecnológica
+## Tech Stack
 
 - **Next.js 16+** (App Router - Standalone mode)
 - **React 19**
